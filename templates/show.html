@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Layerfive User Details
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row" ng-controller="Details" style="margin-left: auto; margin-right: auto; width: 90%;">
+        <div class="col-md-12">
+            <button ng-click="show()">Show Records</button>
+            <input type="hidden" ng-model="errorstate">
+            <div class="alert alert-danger" ng-show="errorstate">
+                {% verbatim %} {{ userdetail }} {% endverbatim %}
+            </div>
+        </div>
+        <div class="card" style="width: 18rem; margin-right: 5px; " ng-repeat="data in records">
+            <div class="card-body">
+                <h3 class="card-title">{% verbatim %} {{ data.firstname }} {{ data.lastname }} {% endverbatim %}</h3>
+                <h4>Email</h4>
+                <p class="card-text">{% verbatim %} {{ data.email }} {% endverbatim %}</p>
+                <h4>Mobile</h4>
+                <p class="card-text">{% verbatim %} {{ data.mobile }} {% endverbatim %}</p>
+                <h5>Address</h5>
+                <p class="card-text">{% verbatim %} {{ data.address1 }} {% endverbatim %}</p>
+                <p class="card-text">{% verbatim %} {{ data.address2 }} {% endverbatim %}</p>
+                <p class="card-text">{% verbatim %} {{ data.address2 }} {% endverbatim %}</p>
+                <p class="card-text">{% verbatim %} {{ data.city }} {% endverbatim %}</p>
+                <p class="card-text">{% verbatim %} {{ data.zipcode }} {% endverbatim %}</p>
+                <p class="card-text">{% verbatim %} {{ data.state }} {% endverbatim %}</p>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        app.controller("Details", ($scope, $http) => {
+            const url = "http://127.0.0.1:8000/create";
+
+            $scope.show = () => {
+                $http.get(url)
+                    .then((response) => $scope.records = response.data)
+                    .catch((err) => {
+                        $scope.errorstate = false;
+                        $scope.userdetail = "No user details posted yet";
+                    });
+            }
+        });
+    </script>
+
+{% endblock %}

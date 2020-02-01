@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Layerfive User DetailForm
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12" ng-controller="UserDetails">
+            <form>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="firstname">Enter Firstname</label>
+                    <input type="text" class="form-control" ng-model="firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Enter Lastname</label>
+                    <input type="text" class="form-control" ng-model="lastname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Enter Email</label>
+                    <input type="email" class="form-control" ng-model="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Enter Mobile Number</label>
+                    <input type="tel" class="form-control" ng-model="mobile" required>
+                </div>
+                <div class="form-group">
+                    <label for="address1">Address 1</label>
+                    <input type="text" class="form-control" ng-model="address1">
+                </div>
+                <div class="form-group">
+                    <label for="address2">Address 2</label>
+                    <input type="text" class="form-control" ng-model="address2">
+                </div>
+                <div class="form-group">
+                    <label for="city">Enter City</label>
+                    <input type="text" class="form-control" ng-model="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="zipcode">Enter Pincode</label>
+                    <input type="tel" class="form-control" ng-model="zipcode" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">Enter State</label>
+                    <input type="text" class="form-control" ng-model="state" required>
+                </div>
+                <button class="btn btn-primary" ng-click="create()">Submit</button>
+                <a href="{% url 'api:show' %}" class="btn btn-primary">Show Details</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        app.controller("UserDetails", ($scope, $http) => {
+            $scope.create = () => {
+                const url = 'http://127.0.0.1:8000/create';
+                const userobj = {
+                    "firstname": $scope.firstname,
+                    "lastname": $scope.lastname,
+                    "email": $scope.email,
+                    "mobile": $scope.mobile,
+                    "address1": $scope.address1,
+                    "address2": $scope.address2,
+                    "city": $scope.city,
+                    "zipcode": $scope.zipcode,
+                    "state": $scope.state
+                };
+
+                $http({
+                    method: 'POST',
+                    url: url,
+                    data: JSON.stringify(userobj),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    }
+                })
+                    .then((response) => window.location.href = '/show')
+                    .catch((err) => alert("Something went wrong"));
+            }
+        });
+
+    </script>
+
+{% endblock %}
